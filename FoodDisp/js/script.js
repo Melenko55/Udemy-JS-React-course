@@ -146,16 +146,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const cardContainer = document.querySelector("[data-cards]");
 
-    const getResource = async (url) => {
-        const res =  await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
-        }
-
-    return await res.json();
-};
-    
     class Card {
         constructor(src, alt, subtitle, description, price) {
             this.src = src;
@@ -188,11 +178,20 @@ window.addEventListener("DOMContentLoaded", () => {
             cardContainer.append(this.createCard());
         }
     }
-    getResource('http://localhost:3000/menu')
-         .then( data => createNewCardElement(data));      
-         
-                    
 
+    const getResource = async (url) => {
+        const res =  await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
+        }
+
+    return await res.json();
+    };
+
+
+    // getResource('http://localhost:3000/menu')
+    //      .then( data => createNewCardElement(data));      
 
     function createNewCardElement(data) {
             data.forEach( ({img, altimg, title, descr, price}) => {
@@ -212,12 +211,12 @@ window.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // getResource('http://localhost:3000/menu')
-    //     .then(data => {
-    //         data.forEach( ({img, altimg, title, descr, price}) => {
-    //             new Card(img, altimg, title, descr, price).render(cardContainer);
-    //         });
-    // });
+    axios.get('http://localhost:3000/menu')
+        .then(data => {
+        data.data.forEach( ({img, altimg, title, descr, price}) => {
+            new Card(img, altimg, title, descr, price).render(cardContainer);
+        });
+    });
     
     // Forms
 
@@ -261,7 +260,6 @@ window.addEventListener("DOMContentLoaded", () => {
             
             postData('http://localhost:3000/requests', json)
             .then(data => {
-                console.log(data);
                 showThanksModal(message.success);
                 statusMessage.remove();
             }).catch(() => {
@@ -293,9 +291,9 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     }
 
-    fetch('http://localhost:3000/menu')
+    /*fetch('http://localhost:3000/menu')
         .then(data => data.json())
-        .then(res => console.log(res));
+        .then(res => console.log(res));*/
     
     
 
