@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () => {
+function slider() {
 
     const prevArrow = document.querySelector(".offer__slider-prev"),
         nextArrow = document.querySelector(".offer__slider-next"),
@@ -75,11 +75,15 @@ window.addEventListener("DOMContentLoaded", () => {
         moveSlide();
     }
 
+    function replaceDigits(str) {
+        return +str.replace(/\D/g, '');
+    }
+
     nextArrow.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1) ){
+        if (offset == replaceDigits(width) * (slides.length - 1) ){
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += replaceDigits(width);
         }
 
         if (currentSlide == slides.length) {
@@ -93,9 +97,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     prevArrow.addEventListener('click', () => {
         if (offset == 0 ){
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            offset = replaceDigits(width) * (slides.length - 1);
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= replaceDigits(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -112,11 +116,13 @@ window.addEventListener("DOMContentLoaded", () => {
         dot.addEventListener('click', (e) => {
             const slideTo = e.target.getAttribute('data-slide-to');
             currentSlide = slideTo;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = replaceDigits(width) * (slideTo - 1);
 
             makeChanges();
         });
     });
 
     
-});
+}
+
+module.exports = slider;
